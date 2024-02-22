@@ -43,7 +43,7 @@ def search_page():
     st.markdown(button_html, unsafe_allow_html=True)
     
     df = my_data
-    filtered_df = df[(df["gene.y"] == gene_name) | (df["cellline"] == cell_line)]
+    filtered_df = df[(df["gene.y"] == gene_name) & (df["cellline"] == cell_line)]
     
     # 使用条件判断是否已经点击了按钮
     if st.session_state.get('button_clicked', False):
