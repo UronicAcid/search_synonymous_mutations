@@ -76,11 +76,13 @@ def search_page():
         st.markdown(get_table_download_link(filtered_df), unsafe_allow_html=True)
 
 def predict_page():
+    st.markdown("<h1 style='text-align: center;'>DS Finder</h1>", unsafe_allow_html=True)
+    st.image("figure 6a1.tif", use_column_width=True)
     st.write("We developed a machine learning model called DS Finder (Deleterious Synonymous mutations Finder), significantly outperformed existing prediction models. DS Finder considers cell type, tissue type, and gene background when making predictions. You can use our algorithm to predict deleterious synonymous mutations of interest. Give it a try!")
     st.markdown("[Visit our github page](https://github.com/UronicAcid/DS-Finder)", unsafe_allow_html=True)
     
 def contact_us_page():
-    st.header("Contact Us")
+    st.markdown("<h1 style='text-align: center;'>Contact Us</h1>", unsafe_allow_html=True)
     st.write("Email：weilab AT pku.edu.cn")
     st.write("地址：北京市海淀区颐和园路5号 北京大学综合科研2号楼207室")
     st.write("邮编：100871")
