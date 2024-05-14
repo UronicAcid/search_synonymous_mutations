@@ -16,17 +16,19 @@ def get_table_download_link(df):
 # 页面内容函数
 def main_page():
     st.markdown("<h1 style='text-align: center;'>Hearing Silence</h1>", unsafe_allow_html=True)
-    st.subheader("Welcome to our research project on the synonymous mutations!")
-    st.write("To precisely investigate whether synonymous mutations in the human genome carry any deleterious effects, we utilized the PE system to accurately simulate 135,828 synonymous and non-synonymous mutations across 3,644 human genes, conducting high-throughput screening with cell proliferation as the phenotype. This research can replicate synonymous mutations that truly exist in clinical settings and under certain screening pressures, test whether synonymous mutations affect cell proliferation, thereby identifying synonymous mutations that are harmful.")
+    st.header("Welcome to our research project on the synonymous mutations!")
+    st.subheader("Disturb the sound of silence")
+    st.write("Synonymous mutations are generally deemed functionally silent and evolutionarily neutral, yet their functional roles and regulatory mechanisms in the human genome have not been systematically explored. Herein, employing the PEmax system, we designed a library containing 297,900 epegRNAs targeting 94,993 synonymous mutations and 39,336 nonsynonymous mutations on 3,644 protein-coding genes and conducted a comprehensive screen to unveil synonymous mutations affecting cell fitness.")
     st.image("figure 1a.tif", use_column_width=True)
-    st.write("In the library, we designed 11 genes with saturated mutations to compare the screening scores of different types of mutations, including synonymous mutations, missense mutations, nonsense mutations, frameshift mutations, and gene read-throughs, on these 11 genes. Synonymous mutations in the human genome are overall neutral, distinctly different from the distributions of missense and nonsense mutations. However, interestingly, there are still a few points that are non-neutral.")
+    st.subheader("Whisper in the sound of silence")
+    st.write("Our findings delineate that the majority of synonymous mutations in the human genome remain neutral, even when they occur in essential genes. Other nonsynonymous mutations, including missense mutations, exhibit more significant effects on cell fitness. But a minority of synonymous mutations can produce phenotypes. These functional synonymous mutations affect a range of biological processes, including mRNA splicing, folding, transcription, and translation.")
     st.image("figure 1c.tif", use_column_width=True)
 
 
 def search_page():
     st.markdown("<h1 style='text-align: center;'>Querying deleterious synonymous mutations</h1>", unsafe_allow_html=True)
     gene_name = st.text_input("Enter Gene Name", "")
-    cell_line = st.selectbox("Select Cell Line", ["HCT116", "HEK293T", "K562"])
+    cell_line = st.selectbox("Select Cell Line", ["HCT116",  "K562"])
     
     # 使用HTML和CSS通过Markdown来居中按钮
     button_html = """
@@ -65,7 +67,7 @@ def search_page():
 
     # 使用selectbox代替text_input让用户选择基因名称
     gene_name = st.selectbox("Enter Gene Name", options=unique_genes)
-    cell_line = st.selectbox("Select Cell Line", ["HCT116", "HEK293T", "K562"])
+    cell_line = st.selectbox("Select Cell Line", ["HCT116",  "K562"])
     filtered_df = df[(df["gene"] == gene_name) & (df["cellline"] == cell_line)]
     st.write(" ")
     # 添加一个按钮来控制是否显示结果和下载链接
@@ -74,7 +76,8 @@ def search_page():
         st.markdown(get_table_download_link(filtered_df), unsafe_allow_html=True)
 
 def predict_page():
-    st.header("Coming soon")
+    st.write("We developed a machine learning model called DS Finder (Deleterious Synonymous mutations Finder), significantly outperformed existing prediction models. DS Finder considers cell type, tissue type, and gene background when making predictions. You can use our algorithm to predict deleterious synonymous mutations of interest. Give it a try!")
+    st.markdown("[Visit our github page](https://github.com/UronicAcid/DS-Finder)", unsafe_allow_html=True)
     
 def contact_us_page():
     st.header("Contact Us")
@@ -89,14 +92,14 @@ def contact_us_page():
 
 # 侧边栏导航设置
 #st.sidebar.title("")
-page = st.sidebar.radio("", ["Main Page", "Search", "Predict", "Contact Us"])
+page = st.sidebar.radio("", ["Home Page", "Search: Touch the sound of silence", "Predict: Echo in the wells of silence", "Contact Us: Remain within the sound of silence"])
 
 # 页面导航逻辑
-if page == "Main Page":
+if page == "Home Page":
     main_page()
-elif page == "Search":
+elif page == "Search: Touch the sound of silence":
     search_page()
-elif page == "Predict":
+elif page == "Predict: Echo in the wells of silence":
     predict_page()
-elif page == "Contact Us":
+elif page == "Contact Us: Remain within the sound of silence":
     contact_us_page()
