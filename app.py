@@ -6,6 +6,7 @@ import subprocess
 import os
 import argparse
 import pickle
+import sys
 
 # 示例数据生成函数
 df = pd.read_csv("screening_results_feature.csv")
@@ -158,7 +159,7 @@ def predict_page():
         prediction_script_path = 'DS-Finder-main/prediction.py'
         
         python_path = sys.executable
-        
+
         # 构造命令行参数
         command = [
             python_path, prediction_script_path,
