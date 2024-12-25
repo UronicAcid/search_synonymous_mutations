@@ -99,9 +99,31 @@ def predict_page():
     
     # 用户输入每个特征的值
     feature_values = {}
-    for feature in required_columns[:-2]:  # Exclude 'mutated_codon_index3' and 'original_codon_index3'
-        feature_values[feature] = st.number_input(f"{feature}:", value=0.0, min_value=0.0, max_value=1.0)
+    #for feature in required_columns[:-2]:  # Exclude 'mutated_codon_index3' and 'original_codon_index3'
+    #    feature_values[feature] = st.number_input(f"{feature}:", value=0.0, min_value=0.0, max_value=1.0)
+    
+    feature_values['position'] = st.number_input("position:", value=46, min_value=0)
+    feature_values['gene_aa_num'] = st.number_input("gene_aa_num:", value=656, min_value=0)
+    feature_values['expression_log'] = st.number_input("Expression (log):", value=7.1, min_value=0.0)
+    feature_values['gene_effect'] = st.number_input("Gene effect:", value=-0.06, min_value=-10.0, max_value=10.0)
+    feature_values['original_codon_freq'] = st.number_input("Original_codon_freq:", value=34.23, min_value=0.0)
+    feature_values['mutated_codon_freq'] = st.number_input("Mutated_codon_freq:", value=312.34, min_value=0.0)
+    feature_values['mutated_codon_norm_freq'] = st.number_input("Mutated_codon_freq (normalized):", value=0.25, min_value=0.0)
+    feature_values['codon_freq_norm_change'] = st.number_input("Codon_freq_change (normalized):", value=-0.5)
+    feature_values['silva_dRSCU'] = st.number_input("dRSCU:", value=0.529)
+    feature_values['splicing_score'] = st.number_input("Splicing_score:", value=0.02, min_value=0.0, max_value=1.0)
+    feature_values['DS_DL'] = st.number_input("DS_DL:", value=0.02)
+    feature_values['DS_DG'] = st.number_input("DS_DG:", value=0)
+    feature_values['absplice_tissue'] = st.number_input("absplice_tissue:", value=0.038, min_value=0.0, max_value=1.0)
+    feature_values['wildtype_energy'] = st.number_input("wildtype_energy:", value=-913.0, max_value=0.0)
+    feature_values['energy_change'] = st.number_input("energy_change:", value=2.9)
+    feature_values['energy_change_abs_ratio'] = st.number_input("energy_change_abs_ratio:", value=0.003, min_value=0.0)
+    feature_values['CADD_RawScore'] = st.number_input("CADD_RawScore:", value=2.81)
+    feature_values['silva_X.GERP..'] = st.number_input("GERP:", value=4.98)
+    feature_values['silva_CpG_exon'] = st.number_input("silva_CpG_exon:", value=0.7708)
+    feature_values['silva_X.CpG.'] = st.number_input("silva_CpG_exon:", value=0)
 
+    
     # 'mutated_codon_index3' 和 'original_codon_index3' 使用 st.selectbox 选择
     codon_choices = ['A', 'T', 'C', 'G']
     feature_values['mutated_codon_index3'] = st.selectbox("Mutated_codon_index3:", codon_choices)
@@ -110,8 +132,7 @@ def predict_page():
     
     # 模型选择下拉菜单
     model_options = [
-        "240304_catboost_model_trained_on_HCT116_D35.sav",
-        "240424_catboost_model_trained_on_K562_D35.sav"
+        "HCT116"
     ]
     selected_model = st.selectbox("Select a model:", model_options)
     
@@ -126,8 +147,10 @@ def predict_page():
 
         # 模型路径
         model_dir = 'model'  # 模型文件存储的目录
-        model_path = os.path.join(model_dir, selected_model)
-        
+        if selected_model == "HCT116":
+            model_full_name= "241110_catboost_model_trained_on_HCT116_D35_depleted_seed2_ratio10.sav"
+        model_path = os.path.join(model_dir, model_full_name)
+                
         # 输出路径
         output_path = 'temp_output.csv'
         
