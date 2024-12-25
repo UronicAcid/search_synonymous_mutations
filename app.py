@@ -24,10 +24,10 @@ def main_page():
     st.header("Welcome to our research project on the synonymous mutations!")
     st.subheader("Disturb the sound of silence")
     st.write("Synonymous mutations are generally deemed functionally silent and evolutionarily neutral, yet their functional roles and regulatory mechanisms in the human genome have not been systematically explored. Herein, employing the PEmax system, we designed a library containing 297,900 epegRNAs targeting 94,993 synonymous mutations and 39,336 nonsynonymous mutations on 3,644 protein-coding genes and conducted a comprehensive screen to unveil synonymous mutations affecting cell fitness.")
-    st.image("figure 1a.tif", use_column_width=True)
+    st.image("figure 1a.tif", use_container_width=True)
     st.subheader("Whisper in the sound of silence")
     st.write("Our findings delineate that the majority of synonymous mutations in the human genome remain neutral, even when they occur in essential genes. Other nonsynonymous mutations, including missense mutations, exhibit more significant effects on cell fitness. But a minority of synonymous mutations can produce phenotypes. These functional synonymous mutations affect a range of biological processes, including mRNA splicing, folding, transcription, and translation.")
-    st.image("figure 1c.tif", use_column_width=True)
+    st.image("figure 1c.tif", use_container_width=True)
 
 
 def search_page():
@@ -84,7 +84,7 @@ def search_page():
 def predict_page():
     # 页面标题和介绍
     st.markdown("<h1 style='text-align: center;'>DS Finder</h1>", unsafe_allow_html=True)
-    st.image("figure 6a1.tif", use_column_width=True)
+    st.image("figure 6a1.tif", use_container_width=True)
     st.write("We developed a machine learning model called **DS Finder** (**D**eleterious **S**ynonymous mutations **Finder**), significantly outperformed existing prediction models. DS Finder considers cell type, tissue type, and gene background when making predictions. You can use our algorithm to predict deleterious synonymous mutations of interest. Give it a try!")
     st.markdown("[Visit our github page](https://github.com/UronicAcid/DS-Finder)", unsafe_allow_html=True)
     
