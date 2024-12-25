@@ -157,9 +157,11 @@ def predict_page():
         # 预测脚本路径
         prediction_script_path = 'DS-Finder-main/prediction.py'
         
+        python_path = sys.executable
+        
         # 构造命令行参数
         command = [
-            'python', prediction_script_path,
+            python_path, prediction_script_path,
             '--model_path', 'DS-Finder-main/' + model_path,
             '--dataset_path', temp_dataset_path,
             '--output_path', output_path
