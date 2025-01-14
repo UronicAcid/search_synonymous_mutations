@@ -8,8 +8,7 @@ import argparse
 import pickle
 import sys
 
-# 示例数据生成函数
-df = pd.read_csv("screening_results_feature.csv")
+df = pd.read_csv("data/HCT116_A549_KYSE30_depleted_syn.csv")
 
 # 下载链接生成函数
 def get_table_download_link(df):
@@ -24,16 +23,16 @@ def main_page():
     st.header("Welcome to our research project on the synonymous mutations!")
     st.subheader("Disturb the sound of silence")
     st.write("Synonymous mutations are generally deemed functionally silent and evolutionarily neutral, yet their functional roles and regulatory mechanisms in the human genome have not been systematically explored. Herein, employing the PEmax system, we designed a library containing 297,900 epegRNAs targeting 94,993 synonymous mutations and 39,336 nonsynonymous mutations on 3,644 protein-coding genes and conducted a comprehensive screen to unveil synonymous mutations affecting cell fitness.")
-    st.image("figure 1a.tif", use_container_width=True)
+    st.image("figure 1a.tif")
     st.subheader("Whisper in the sound of silence")
     st.write("Our findings delineate that the majority of synonymous mutations in the human genome remain neutral, even when they occur in essential genes. Other nonsynonymous mutations, including missense mutations, exhibit more significant effects on cell fitness. But a minority of synonymous mutations can produce phenotypes. These functional synonymous mutations affect a range of biological processes, including mRNA splicing, folding, transcription, and translation.")
-    st.image("figure 1c.tif", use_container_width=True)
+    st.image("figure 1c.tif")
 
 
 def search_page():
     st.markdown("<h1 style='text-align: center;'>Querying deleterious synonymous mutations</h1>", unsafe_allow_html=True)
     gene_name = st.text_input("Enter Gene Name", "")
-    cell_line = st.selectbox("Select Cell Line", ["HCT116",  "K562"])
+    cell_line = st.selectbox("Select Cell Line", ["HCT116",  "KYSE-30", "A549"])
     
     # 使用HTML和CSS通过Markdown来居中按钮
     button_html = """
@@ -47,7 +46,7 @@ def search_page():
         <button class="css-qbe2hs edgvbvh1" onclick="document.querySelector('.stButton > button').click();">Search</button>
     </div>
     """
-    st.markdown(button_html, unsafe_allow_html=True)
+
     
     df = my_data
     filtered_df = df[(df["gene"] == gene_name) | (df["cellline"] == cell_line)]
@@ -72,7 +71,7 @@ def search_page():
 
     # 使用selectbox代替text_input让用户选择基因名称
     gene_name = st.selectbox("Enter Gene Name", options=unique_genes)
-    cell_line = st.selectbox("Select Cell Line", ["HCT116",  "K562"])
+    cell_line = st.selectbox("Select Cell Line", ["HCT116",  "KYSE-30", "A549"])
     filtered_df = df[(df["gene"] == gene_name) & (df["cellline"] == cell_line)]
     st.write(" ")
     # 添加一个按钮来控制是否显示结果和下载链接
@@ -84,8 +83,34 @@ def search_page():
 def predict_page():
     # 页面标题和介绍
     st.markdown("<h1 style='text-align: center;'>DS Finder</h1>", unsafe_allow_html=True)
-    st.image("figure 6a1.tif", use_container_width=True)
+    st.image("figure 6a1.tif")
     st.write("We developed a machine learning model called **DS Finder** (**D**eleterious **S**ynonymous mutations **Finder**), significantly outperformed existing prediction models. DS Finder considers cell type, tissue type, and gene background when making predictions. You can use our algorithm to predict deleterious synonymous mutations of interest. Give it a try!")
+
+    st.write("Currently, only the prediction of HCT116 are available on the web version. Due to the large size of various databases, it is not available to directly predict by inputting the mutation position at present. You still need to collect features on the database website.")
+    
+
+
+    # 模型选择下拉菜单
+    #model_options = [
+    #    "HCT116"
+    #]
+    #selected_model = st.selectbox("Select a model:", model_options)
+    selected_model = "HCT116"
+    st.markdown(
+        """
+        The following are the features required for model prediction. 
+        """,
+        unsafe_allow_html=True
+    )
+
+    # 使用可展开的区域来显示文档
+    with st.expander("For detailed instructions, please refer to the documentation of the data and code.", expanded=False):
+        # 显示 HTML 文件内容
+        html_file = "pages/README.html"
+        with open(html_file, "r", encoding="utf-8") as file:
+            html_content = file.read()
+        st.components.v1.html(html_content, height=600, scrolling=True)
+
     st.markdown("[Visit our github page](https://github.com/UronicAcid/DS-Finder)", unsafe_allow_html=True)
     
     # 定义必填的特征
@@ -131,11 +156,7 @@ def predict_page():
     feature_values['original_codon_index3'] = st.selectbox("Original_codon_index3:", codon_choices)
 
     
-    # 模型选择下拉菜单
-    model_options = [
-        "HCT116"
-    ]
-    selected_model = st.selectbox("Select a model:", model_options)
+
     
     # 按钮触发预测
     if st.button("Predict"):
@@ -174,8 +195,20 @@ def predict_page():
             
             # 读取预测结果并显示
             output_df = pd.read_csv(output_path)
-            st.write("Prediction Result:")
-            st.write(output_df['predicted_y_score'])
+            predicted_score = output_df['predicted_y_score'].tolist()[0]
+            st.write("Prediction Result:", + predicted_score)
+
+            classification = "likely benign"
+            if predicted_score >= 0.138:
+                classification = "potentially pathogenic"
+            elif predicted_score >= 0.370:
+                classification = "likely pathogenic"
+            st.markdown("The mutation is **" + classification + "** according to the prediction score.")
+
+            st.write("likely pathogenic: >= 0.370")
+            st.write("potentially pathogenic: 0.138 - 0.370")
+            st.write("likely benign: < 0.138")
+
 
         except subprocess.CalledProcessError as e:
             st.error(f"Error during prediction: {e}")
@@ -187,9 +220,9 @@ def predict_page():
 
 def contact_us_page():
     st.markdown("<h1 style='text-align: center;'>Contact Us</h1>", unsafe_allow_html=True)
-    st.write("Email：weilab AT pku.edu.cn")
-    st.write("地址：北京市海淀区颐和园路5号 北京大学综合科研2号楼207室")
-    st.write("邮编：100871")
+    st.write("Email: weilab AT pku.edu.cn")
+    st.write("Address: Room 207, No. 2 Integrated Science Research Building, Biomedical Pioneering Innovation Center, Peking University, No.5 Yiheyuan Road, Haidian District, Beijing")
+    st.write("Postal code: 100871")
     st.markdown("[Visit our lab page](https://weilab.pku.edu.cn/)", unsafe_allow_html=True)
     st.markdown("---")
     st.write("Xuran Niu: crispr_nxr AT 163.com")
