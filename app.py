@@ -49,7 +49,9 @@ def search_page():
 
     
     df = my_data
-    filtered_df = df[(df["gene"] == gene_name) | (df["cellline"] == cell_line)]
+    if cell_line == "KYSE-30":
+        cell_line = "KYSE30"
+    filtered_df = df[(df["gene"] == gene_name) | (df["cell_line"] == cell_line)]
     
     # 使用条件判断是否已经点击了按钮
     if st.session_state.get('button_clicked', False):
@@ -72,7 +74,7 @@ def search_page():
     # 使用selectbox代替text_input让用户选择基因名称
     gene_name = st.selectbox("Enter Gene Name", options=unique_genes)
     cell_line = st.selectbox("Select Cell Line", ["HCT116",  "KYSE-30", "A549"])
-    filtered_df = df[(df["gene"] == gene_name) & (df["cellline"] == cell_line)]
+    filtered_df = df[(df["gene"] == gene_name) & (df["cell_line"] == cell_line)]
     st.write(" ")
     # 添加一个按钮来控制是否显示结果和下载链接
     if st.button('Search'):
